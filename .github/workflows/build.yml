@@ -1,0 +1,116 @@
+name: Build and Release MineFuck
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build fat JAR
+        run: mvn clean package -q
+
+      - name: Verify natives are bundled
+        run: |
+          echo "JAR size:"
+          ls -lh target/minefuck-1.0-SNAPSHOT.jar
+          echo ""
+          echo "Bundled natives:"
+          jar tf target/minefuck-1.0-SNAPSHOT.jar | grep -E '\.(dll|dylib|so)$'
+
+      - name: Prepare release artifacts
+        run: |
+          mkdir -p release
+          cp target/minefuck-1.0-SNAPSHOT.jar release/MineFuck.jar
+          cp run.sh release/
+          cp run.bat release/
+          cp install-windows.ps1 release/
+          cp MineFuck-Mac.command release/
+          chmod +x release/run.sh release/MineFuck-Mac.command
+
+          # Create Windows zip
+          cd release
+          zip -r ../MineFuck-Windows.zip MineFuck.jar run.bat install-windows.ps1
+          cd ..
+
+          # Create macOS zip
+          cd release
+          zip -r ../MineFuck-macOS.zip MineFuck.jar run.sh MineFuck-Mac.command
+          cd ..
+
+          # Create universal zip
+          cd release
+          zip -r ../MineFuck-Universal.zip MineFuck.jar run.sh run.bat install-windows.ps1 MineFuck-Mac.command
+          cd ..
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MineFuck
+          path: |
+            release/MineFuck.jar
+            release/run.sh
+            release/run.bat
+            release/install-windows.ps1
+            release/MineFuck-Mac.command
+
+      - name: Get short SHA
+        id: sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Create/Update Latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "MineFuck Latest Build"
+          body: |
+            ## ⬇️ Download MineFuck
+
+            ### Windows (Easiest)
+            1. Download **MineFuck-Windows.zip**
+            2. Extract the zip
+            3. Double-click **`install-windows.ps1`** → Right-click → "Run with PowerShell"
+               - This checks for Java, installs it if needed, and creates a desktop shortcut
+            4. Or just double-click **`run.bat`** if you already have Java 17+
+
+            ### macOS
+            1. Download **MineFuck-macOS.zip**
+            2. Extract the zip
+            3. Double-click **`MineFuck-Mac.command`**
+               - If blocked: Right-click → Open → Open
+            4. Grant permission if prompted
+
+            ### Linux
+            1. Download **MineFuck-macOS.zip** (same launcher works)
+            2. Extract and run: `chmod +x run.sh && ./run.sh`
+
+            ### Universal
+            Download **MineFuck-Universal.zip** — contains launchers for all platforms.
+
+            ---
+            *Built from commit ${{ steps.sha.outputs.short }}*
+          draft: false
+          prerelease: false
+          make_latest: true
+          files: |
+            MineFuck-Windows.zip
+            MineFuck-macOS.zip
+            MineFuck-Universal.zip
+            release/MineFuck.jar

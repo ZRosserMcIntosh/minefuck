@@ -10,6 +10,36 @@ A vanilla Minecraft clone built from scratch in Java using LWJGL3 (OpenGL 3.3).
 
 ---
 
+## ⬇️ ONE-CLICK DOWNLOAD
+
+> **No terminal required. No build tools needed. Just download, extract, and play.**
+
+| Platform | Download | Instructions |
+|----------|----------|-------------|
+| 🪟 **Windows** | [**⬇ Download for Windows**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Windows.zip) | Extract zip → Right-click `install-windows.ps1` → **Run with PowerShell** |
+| 🍎 **macOS** | [**⬇ Download for macOS**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip) | Extract zip → Double-click `MineFuck-Mac.command` |
+| 🐧 **Linux** | [**⬇ Download for Linux**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip) | Extract zip → Run `./run.sh` |
+| 🌐 **All Platforms** | [**⬇ Download Universal**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Universal.zip) | Contains launchers for every platform |
+| ☕ **JAR Only** | [**⬇ MineFuck.jar**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck.jar) | For advanced users who already have Java 17+ |
+
+### Windows Quick Start (3 steps):
+1. Click the **Download for Windows** button above
+2. Extract the zip file
+3. Right-click **`install-windows.ps1`** → **"Run with PowerShell"**
+   - It will check for Java, offer to install it if missing, create a desktop shortcut, and launch the game!
+   - If you already have Java: just double-click **`run.bat`** instead
+
+### macOS Quick Start (3 steps):
+1. Click the **Download for macOS** button above
+2. Extract the zip file
+3. Double-click **`MineFuck-Mac.command`**
+   - If macOS blocks it: Right-click → Open → Open
+   - Requires Java 17+ (install with `brew install openjdk@17`)
+
+> 💡 **All downloads include native libraries for every platform** — the same JAR runs on Windows, macOS, and Linux.
+
+---
+
 ## 🎮 Features
 
 - **Procedural World Generation** — Infinite terrain with Perlin noise heightmaps, biomes (forests, deserts, snow)
