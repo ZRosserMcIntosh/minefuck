@@ -10,8 +10,8 @@ permissions:
   contents: write
 
 jobs:
-  build-jar:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,92 +23,56 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build fat JAR
-        run: mvn clean package -q
+      - name: Build JAR and EXE
+        run: mvn clean package -Pwindows-exe -q
+        shell: cmd
 
-      - name: Upload JAR
+      - name: Verify outputs
+        run: |
+          dir target\minefuck-1.0-SNAPSHOT.jar
+          dir target\MineFuck.exe
+        shell: cmd
+
+      - name: Prepare release files
+        run: |
+          mkdir release
+          copy target\MineFuck.exe release\
+          copy target\minefuck-1.0-SNAPSHOT.jar release\MineFuck.jar
+          copy run.sh release\
+          copy run.bat release\
+          copy MineFuck-Mac.command release\
+        shell: cmd
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: game-jar
-          path: target/minefuck-1.0-SNAPSHOT.jar
-
-  build-exe:
-    needs: build-jar
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download JAR
-        uses: actions/download-artifact@v4
-        with:
-          name: game-jar
-          path: build
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Download Launch4j
-        run: |
-          Invoke-WebRequest -Uri "https://sourceforge.net/projects/launch4j/files/launch4j-3/3.50/launch4j-3.50-win32.zip/download" -OutFile launch4j.zip
-          Expand-Archive launch4j.zip -DestinationPath .
-        shell: pwsh
-
-      - name: Build exe
-        run: |
-          $jarPath = (Resolve-Path "build/minefuck-1.0-SNAPSHOT.jar").Path
-          $exePath = (Join-Path $PWD "MineFuck.exe")
-          $configTemplate = Get-Content "launch4j-config.xml" -Raw
-          $config = $configTemplate.Replace("PLACEHOLDER_JAR", $jarPath).Replace("PLACEHOLDER_EXE", $exePath)
-          $config | Out-File -FilePath "launch4j-resolved.xml" -Encoding utf8
-          & .\launch4j\launch4j.exe launch4j-resolved.xml
-          Get-Item MineFuck.exe | Select-Object Name, Length
-        shell: pwsh
-
-      - name: Upload exe
-        uses: actions/upload-artifact@v4
-        with:
-          name: game-exe
-          path: MineFuck.exe
+          name: minefuck-release
+          path: release/
 
   release:
-    needs: [build-jar, build-exe]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download JAR
+      - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: game-jar
-          path: artifacts
+          name: minefuck-release
+          path: release
 
-      - name: Download exe
-        uses: actions/download-artifact@v4
-        with:
-          name: game-exe
-          path: artifacts
-
-      - name: Prepare release zips
+      - name: Create zip packages
         run: |
-          mkdir -p release
-          cp artifacts/minefuck-1.0-SNAPSHOT.jar release/MineFuck.jar
-          cp artifacts/MineFuck.exe release/
-          cp run.sh release/
-          cp run.bat release/
-          cp MineFuck-Mac.command release/
-          chmod +x release/run.sh release/MineFuck-Mac.command
           cd release
+          chmod +x run.sh MineFuck-Mac.command 2>/dev/null || true
           zip -r ../MineFuck-Windows.zip MineFuck.exe MineFuck.jar run.bat
           zip -r ../MineFuck-macOS.zip MineFuck.jar run.sh MineFuck-Mac.command
           zip -r ../MineFuck-Universal.zip MineFuck.exe MineFuck.jar run.sh run.bat MineFuck-Mac.command
           cd ..
           cp release/MineFuck.exe .
           cp release/MineFuck.jar .
+          echo "=== Release files ==="
           ls -lh MineFuck.exe MineFuck.jar MineFuck-Windows.zip MineFuck-macOS.zip MineFuck-Universal.zip
 
       - name: Delete old release
@@ -121,24 +85,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: MineFuck - Download and Play
+          name: "MineFuck - Download and Play"
           body: |
-            ## Download MineFuck
+            ## 🎮 Download MineFuck
 
-            ### Windows - Just double-click the .exe!
+            ### 🪟 Windows — Just double-click!
             1. Download **MineFuck.exe** below
             2. Double-click it. Done!
-            3. If Java 17+ is missing it opens the download page for you
-            4. Windows SmartScreen may warn - click **More info** then **Run anyway**
+            3. Requires Java 17+ (opens download page if missing)
+            4. Windows SmartScreen may warn → click **More info** → **Run anyway**
 
-            ### macOS
+            ### 🍎 macOS
             1. Download **MineFuck-macOS.zip**
             2. Extract and double-click **MineFuck-Mac.command**
-            3. If blocked: Right-click, Open, Open
+            3. If blocked: Right-click → Open → Open
 
-            ### Linux
-            1. Download **MineFuck-macOS.zip** (same package)
-            2. chmod +x run.sh && ./run.sh
+            ### 🐧 Linux
+            1. Download **MineFuck-Universal.zip**
+            2. `chmod +x run.sh && ./run.sh`
           draft: false
           prerelease: false
           make_latest: true
