@@ -44,9 +44,9 @@ public class Player {
     }
 
     public void handleInput(float moveX, float moveZ, boolean jump, boolean sneak, float mouseDX, float mouseDY) {
-        // Mouse look
+        // Mouse look - mouseDY is screen delta (positive = mouse moved down = look down = decrease pitch)
         yaw += mouseDX * MOUSE_SENSITIVITY;
-        pitch -= mouseDY * MOUSE_SENSITIVITY;
+        pitch += mouseDY * MOUSE_SENSITIVITY;
 
         // Clamp pitch
         if (pitch > 89.0f) pitch = 89.0f;
@@ -66,9 +66,9 @@ public class Player {
         float rightX = (float) Math.cos(yawRad);
         float rightZ = -(float) Math.sin(yawRad);
 
-        // Horizontal velocity from input
-        float targetVX = (moveX * rightX + moveZ * forwardZ) * speed;
-        float targetVZ = (moveX * rightZ + moveZ * (-forwardX)) * speed;
+        // Horizontal velocity from input: forward/back along look direction, strafe perpendicular
+        float targetVX = (moveX * rightX + moveZ * forwardX) * speed;
+        float targetVZ = (moveX * rightZ + moveZ * forwardZ) * speed;
 
         // Normalize diagonal movement
         if (moveX != 0 && moveZ != 0) {

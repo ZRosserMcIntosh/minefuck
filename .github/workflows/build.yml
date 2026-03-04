@@ -85,9 +85,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "MineFuck - Download and Play"
+          name: "MineFuck v1.0.0 - Download and Play"
           body: |
             ## 🎮 Download MineFuck
+            Version: 1.0.0
+
+            **Includes auto-updating!** The game checks for new versions on startup.
 
             ### 🪟 Windows — Just double-click!
             1. Download **MineFuck.exe** below

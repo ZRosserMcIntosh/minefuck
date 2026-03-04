@@ -133,8 +133,8 @@ public class Game {
         boolean jump = false;
         boolean sneak = false;
 
-        if (input.isKeyDown(GLFW_KEY_W)) moveZ -= 1;
-        if (input.isKeyDown(GLFW_KEY_S)) moveZ += 1;
+        if (input.isKeyDown(GLFW_KEY_W)) moveZ += 1;
+        if (input.isKeyDown(GLFW_KEY_S)) moveZ -= 1;
         if (input.isKeyDown(GLFW_KEY_A)) moveX -= 1;
         if (input.isKeyDown(GLFW_KEY_D)) moveX += 1;
         if (input.isKeyDown(GLFW_KEY_SPACE)) jump = true;
