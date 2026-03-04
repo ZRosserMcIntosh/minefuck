@@ -12,31 +12,41 @@ A vanilla Minecraft clone built from scratch in Java using LWJGL3 (OpenGL 3.3).
 
 ## ⬇️ ONE-CLICK DOWNLOAD
 
-> **No terminal required. No build tools needed. Just download, extract, and play.**
+> **No terminal required. No build tools needed.**
 
-| Platform | Download | Instructions |
-|----------|----------|-------------|
-| 🪟 **Windows** | [**⬇ Download for Windows**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Windows.zip) | Extract zip → Right-click `install-windows.ps1` → **Run with PowerShell** |
-| 🍎 **macOS** | [**⬇ Download for macOS**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip) | Extract zip → Double-click `MineFuck-Mac.command` |
-| 🐧 **Linux** | [**⬇ Download for Linux**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip) | Extract zip → Run `./run.sh` |
-| 🌐 **All Platforms** | [**⬇ Download Universal**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Universal.zip) | Contains launchers for every platform |
-| ☕ **JAR Only** | [**⬇ MineFuck.jar**](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck.jar) | For advanced users who already have Java 17+ |
+### 🪟 Windows — Double-click the .exe!
 
-### Windows Quick Start (3 steps):
-1. Click the **Download for Windows** button above
-2. Extract the zip file
-3. Right-click **`install-windows.ps1`** → **"Run with PowerShell"**
-   - It will check for Java, offer to install it if missing, create a desktop shortcut, and launch the game!
-   - If you already have Java: just double-click **`run.bat`** instead
+[![Download MineFuck.exe](https://img.shields.io/badge/⬇_Download-MineFuck.exe-blue?style=for-the-badge&logo=windows)](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck.exe)
 
-### macOS Quick Start (3 steps):
-1. Click the **Download for macOS** button above
-2. Extract the zip file
-3. Double-click **`MineFuck-Mac.command`**
-   - If macOS blocks it: Right-click → Open → Open
-   - Requires Java 17+ (install with `brew install openjdk@17`)
+1. Click the button above to download **`MineFuck.exe`**
+2. Double-click it. Done.
+3. If you don't have Java, it will open the download page for you automatically
+4. Windows SmartScreen may say "Unknown publisher" — click **"More info" → "Run anyway"**
 
-> 💡 **All downloads include native libraries for every platform** — the same JAR runs on Windows, macOS, and Linux.
+### 🍎 macOS — Double-click to play
+
+[![Download for macOS](https://img.shields.io/badge/⬇_Download-macOS-blue?style=for-the-badge&logo=apple)](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip)
+
+1. Download and extract the zip
+2. Double-click **`MineFuck-Mac.command`**
+3. If macOS blocks it: Right-click → Open → Open
+4. Requires Java 17+ (`brew install openjdk@17`)
+
+### 🐧 Linux
+
+[![Download for Linux](https://img.shields.io/badge/⬇_Download-Linux-blue?style=for-the-badge&logo=linux)](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-macOS.zip)
+
+Extract → `chmod +x run.sh && ./run.sh`
+
+### Other Downloads
+
+| Download | Description |
+|----------|-------------|
+| [MineFuck-Windows.zip](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Windows.zip) | `.exe` + `.jar` + `.bat` launcher |
+| [MineFuck-Universal.zip](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck-Universal.zip) | All platforms in one zip |
+| [MineFuck.jar](https://github.com/ZRosserMcIntosh/minefuck/releases/latest/download/MineFuck.jar) | Standalone JAR (advanced, needs Java 17+) |
+
+> 💡 **All downloads include native libraries for every platform** — the same binary runs on Windows, macOS, and Linux.
 
 ---
 
